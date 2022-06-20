@@ -44,6 +44,7 @@ services:
       POSTGRES_PASSWORD: "postgres"
     volumes:
       - ./infra/postgres-init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./database:/database
 
   ldapadmin:
     image: ldapaccountmanager/lam:stable
