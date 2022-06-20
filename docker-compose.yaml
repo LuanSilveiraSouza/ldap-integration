@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+
+  ldap:
+    image: bitnami/openldap
+    container_name: example-ldap
+    environment:
+      LDAP_ROOT: "dc=example,dc=com"
+      LDAP_ADMIN_USERNAME: "admin"
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_SKIP_DEFAULT_TREE: "no"
+      LDAP_ALLOW_ANON_BINDING: "yes"
+      LDAP_EXTRA_SCHEMAS: "cosine,inetorgperson,nis"
+      LDAP_CUSTOM_LDIF_DIR: /ldif
+    volumes:
+      - ./infra/ldap-tree.ldif:/ldif/ldap-tree.ldif
+    ports:
+      - 1389:1389
+      - 1636:1636
+
+  dex:
+    image: dexidp/dex
+    container_name: example-dex
+    command: "dex serve /dex-ldap.yaml"
+    volumes: 
+      - ./infra/dex-ldap.yaml:/dex-ldap.yaml
+    ports:
+      - 5557:5556
+    depends_on:
+      postgres: 
+        condition: service_started
+      ldap:
+        condition: service_started
+
+  postgres:
+    image: postgres
+    container_name: example-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "main"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    volumes:
+      - ./infra/postgres-init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+
+  ldapadmin:
+    image: ldapaccountmanager/lam:stable
+    container_name: example-ldapadmin
+    ports:
+      - "8080:80"
+    depends_on:
+      - ldap
+    profiles:
+      - debug
+    
+networks:
+  default:
+    name: example
+

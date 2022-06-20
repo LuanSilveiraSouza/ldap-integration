@@ -1,0 +1,33 @@
+version: 1
+
+dn: dc=example,dc=com
+objectClass: dcObject
+objectClass: organization
+objectClass: top
+o: example
+dc: example
+
+dn: ou=users,dc=example,dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: users
+
+dn: cn=admin@example.com,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: admin@example.com
+sn: Admin
+mail: admin@example.com
+userPassword: MTIzNDU2
+
+dn: cn=client@example.com,ou=users,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: client@example.com
+sn: Client
+mail: client@example.com
+userPassword: MTIzNDU2
