@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"fmt"
 	"ldap-integration/src/server"
+	"ldap-integration/src/user"
 	"net/http"
 	"os"
 	"time"
@@ -43,7 +45,12 @@ func main() {
 		os.Exit(-1)
 	}
 
-	handler := server.NewHTTPServer()
+	userRepo := user.NewRepo(db)
+	userService := user.NewService(userRepo)
+
+	ctx := context.Background()
+
+	handler := server.NewHTTPServer(ctx, userService)
 
 	fmt.Println("App listening on localhost:3000")
 	http.ListenAndServe("127.0.0.1:3000", handler)
