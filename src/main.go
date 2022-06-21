@@ -4,8 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"ldap-integration/src/server"
+	"net/http"
 	"os"
 	"time"
+
+	_ "github.com/lib/pq"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -38,6 +42,11 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(-1)
 	}
+
+	handler := server.NewHTTPServer()
+
+	fmt.Println("App listening on localhost:3000")
+	http.ListenAndServe("127.0.0.1:3000", handler)
 }
 
 func connectDatabase() (*sql.DB, error) {

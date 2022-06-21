@@ -2,7 +2,11 @@ module ldap-integration
 
 go 1.17
 
-require github.com/golang-migrate/migrate/v4 v4.15.2
+require (
+	github.com/golang-migrate/migrate/v4 v4.15.2
+	github.com/gorilla/mux v1.7.4
+	github.com/lib/pq v1.10.6
+)
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -10,7 +14,6 @@ require (
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/lib/pq v1.10.6 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
