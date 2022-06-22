@@ -2,6 +2,7 @@ package user
 
 import (
 	"ldap-integration/src/core"
+	"ldap-integration/src/ldap"
 	"net/http"
 	"strconv"
 
@@ -15,11 +16,12 @@ type Service interface {
 }
 
 type service struct {
-	repository Repository
+	repository  Repository
+	ldapService ldap.Service
 }
 
-func NewService(rep Repository) Service {
-	return &service{repository: rep}
+func NewService(rep Repository, ldapSrv ldap.Service) Service {
+	return &service{repository: rep, ldapService: ldapSrv}
 }
 
 func (s service) ListUserTypes(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +46,13 @@ func (s service) Get(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		core.ResponseInternalError(w, err.Error())
 	}
+
+	entry, err := s.ldapService.Get("admin@example.com")
+	if err != nil {
+		core.ResponseInternalError(w, err.Error())
+	}
+
+	entry.Print()
 
 	core.ResponseOk(w, user)
 }

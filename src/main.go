@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"ldap-integration/src/ldap"
 	"ldap-integration/src/server"
 	"ldap-integration/src/user"
 	"net/http"
@@ -45,8 +46,9 @@ func main() {
 		os.Exit(-1)
 	}
 
+	ldapService := ldap.NewLDAPService()
 	userRepo := user.NewRepo(db)
-	userService := user.NewService(userRepo)
+	userService := user.NewService(userRepo, ldapService)
 
 	ctx := context.Background()
 
