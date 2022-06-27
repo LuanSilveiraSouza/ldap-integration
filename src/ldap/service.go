@@ -41,6 +41,10 @@ func (s *ldapService) Get(cn string) (*goldap.Entry, error) {
 		return nil, err
 	}
 
+	if len(result.Entries) == 0 {
+		return nil, nil
+	}
+
 	return result.Entries[0], nil
 }
 
